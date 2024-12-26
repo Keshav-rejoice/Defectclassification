@@ -7,10 +7,8 @@ from tensorflow.keras.models import load_model
 from keras.preprocessing.image import img_to_array
 from keras.applications.inception_v3 import preprocess_input
 
-# OpenAI API key (set up in your environment or provide here)
-openai.api_key = ""
+openai.api_key =  st.secrets["OPENAI_API_KEY"]
 
-# Define class labels
 class_labels = [
     "Algae",
     "Bubbles and blisters",
@@ -23,23 +21,19 @@ class_labels = [
     "Shade Variation"
 ]
 
-# Function to encode image in Base64 format
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
-# Load the trained model
 @st.cache_resource
 def load_trained_model():
     return load_model('my_model12.h5')
 
 loaded_model = load_trained_model()
 
-# Streamlit UI
 st.title("Wall Defect Classification and AI Analysis")
 st.write("Upload an image to classify wall defects and generate AI-based descriptions.")
 
-# File uploader for the image
 uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
@@ -87,7 +81,7 @@ if uploaded_file is not None:
             f"Can you analyze the following image and generate AI-based descriptions for these defects?"
         )
 
-        st.write("Analyzing image with OpenAI...")
+        st.write("Analyzing image")
         try:
             response = openai.chat.completions.create(
             model="gpt-4o",
